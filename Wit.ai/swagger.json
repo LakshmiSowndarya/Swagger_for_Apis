@@ -1,0 +1,897 @@
+{
+  "swagger": "2.0",
+  "schemes": [
+    "https"
+  ],
+  "host": "api.wit.ai",
+  "info": {
+    "description": "Wit.ai makes it easy for developers to build applications and devices that you can talk or text to.\n",
+    "title": "Wit.ai",
+    "version": "20170307",
+    "x-logo": {
+      "url": "https://static.xx.fbcdn.net/rsrc.php/yY/r/dMWEtAsP7lM.svg"
+    },
+    "x-origin": [
+      {
+        "format": "swagger",
+        "version": "2.0"
+      }
+    ],
+    "x-preferred": true,
+    "x-providerName": "wit.ai",
+    "x-unofficialSpec": true
+  },
+  "externalDocs": {
+    "url": "https://wit.ai/docs/http/20170307"
+  },
+  "security": [{"api_key":[]}],
+  "securityDefinitions": {
+    "api_key": {
+      "type": "oauth2",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/message": {
+      "get": {
+        "description": "Returns the extracted meaning from a sentence, based on the app data.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "v",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Meaning of the messages extracted successfully."
+          }
+        }
+      }
+    },
+    "/messages/{msg-id}":{
+      "get":{
+        "description":"Returns the stroeed message for a specific Id",
+        "parameters":[
+          {
+            "in": "query",
+            "name": "v",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in":"path",
+            "name":"msg-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description": "Operation successful"
+          }
+        }
+      }
+    },
+    "/speech":{
+      "post":{
+        "description":"returns the meaning extracted from an audio",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"header",
+            "name":"Content-Type",
+            "required":true,
+            "enum":[
+              "audio/wav",
+              "audio/mpeg3",
+              "audio/ulaw",
+              "audio/raw"
+            ],
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/converse":{
+      "post":{
+        "description":"returns what your bot should do next",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"query",
+            "name":"session_id",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"header",
+            "name":"Accept",
+            "required":true,
+            "type":"string",
+            "default":"application/json"
+          },
+          {
+            "in":"header",
+            "name":"Content-Type",
+            "required":true,
+            "type":"string",
+            "default":"application/json"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/samples":{
+      "post":{
+        "description":"validate samples to train your app programmatically",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "required":true,
+            "schema":{
+              "$ref": "#/definitions/postSamples"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/apps":{
+      "post":{
+        "description":"create a new app for existing user",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "required":true,
+            "schema":{
+              "$ref":"#/definitions/postApps"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/apps/{app-id}":{
+      "put":{
+        "description":"update an app with given attributes",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "required":true,
+            "schema":{
+              "$ref":"#/definitions/putApps"
+            }
+          },
+          {
+            "in":"path",
+            "name":"app-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/intents":{
+      "get":{
+        "description":"returns the list of intents",
+        "parameters":[
+          {
+            "in": "query",
+            "name": "v",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"returns the list of intents successfully"
+          }
+        }
+      },
+      "post":{
+        "description":"It creates a new intent and currently api accepts expressions without entities",
+        "parameters":[
+          {
+            "in": "query",
+            "name": "v",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in":"header",
+            "name":"Content-Type",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "schema":{
+              "$ref" : "#/definitions/postIntents"
+            },
+            "required":false
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"post successfully"
+          }
+        }
+      }
+    },
+    "/intents/{intent-id}":{
+      "get":{
+        "description":"retrieve all the entities and expressions of an intent",
+        "parameters":[
+          {
+            "in": "query",
+            "name": "v",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in":"path",
+            "name":"intent-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      },
+      "put":{
+        "description":"update the intent attributes but not contents",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "schema":{
+              "$ref":"#/definitions/putIntent"
+            }
+          },
+          {
+            "in":"path",
+            "name":"intent-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/intents/{intent-id}/expressions":{
+      "post":{
+        "description":"Add validated expressions to the given intent",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "schema":{
+              "$ref":"#/definitions/postIntentExpressions"
+            }
+          },
+          {
+            "in":"path",
+            "name":"intent-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/intents/{intent-id}/{expression-id}":{
+      "delete":{
+        "description":"delete the expression from the given field",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"intent-id",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"expression-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/entities":{
+      "get":{
+        "description":"returns a list of available entities for the app",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      },
+      "post":{
+        "description":"create entity",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "required":true,
+            "schema":{
+              "$ref": "#/definitions/updateEntity"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/entities/{entity-id}":{
+      "get":{
+        "description":"Retrieve all the values of entity",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"entity-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      },
+      "put":{
+        "description":"Update the entity with given attributes",
+        "parameters":[
+          {
+            "in":"path",
+            "name":"entity-id",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "required":true,
+            "schema":{
+              "$ref":"#/definitions/putEntity"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      },
+      "delete":{
+        "description":"permanently remove the entity",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"entity-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/entities/{entity-id}/values":{
+      "post":{
+        "description":"Add a possible value into the list of values for the entity",
+        "parameters":[
+          {
+            "in":"path",
+            "name":"entity-id",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"body",
+            "name":"body",
+            "required":true,
+            "schema":{
+              "$ref":"#/definitions/postEntityValues"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      },
+      "delete":{
+        "description":"delete a canonical value from the entity",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"entity-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/entities/{entity-id}/values/{value-id}/expressions":{
+      "post":{
+        "description":"Create a new expression of the canonical value of the entity",
+        "parameters":[
+          {
+            "in":"body",
+            "name":"body",
+            "required":true,
+            "schema":{
+              "$ref":"#/definitions/postEntitiesValuesExpressions"
+            }
+          },
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"entity-id",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"value-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    },
+    "/entities/{entity-id}/values/{value-id}/expressions/{expression-id}":{
+      "delete":{
+        "description":"Delete an expression of the canonical value of the entity.",
+        "parameters":[
+          {
+            "in":"query",
+            "name":"v",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"entity-id",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"value-id",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "in":"path",
+            "name":"expression-id",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"operation successful"
+          }
+        }
+      }
+    }
+  },
+  "definitions":{
+    "postIntents":{
+      "type":"object",
+      "properties":{
+        "name":{
+          "type":"string"
+        },
+        "doc":{
+          "type":"string"
+        },
+        "metadata":{
+          "type":"string"
+        },
+        "expressions":{
+          "type":"array",
+          "items":{
+            "type":"object",
+            "properties":{
+              "body":{
+                "type":"string"
+              }
+            }
+          }
+        },
+        "meta":{
+          "type":"object",
+          "properties":{
+            "states":{
+              "type":"array",
+              "items":{
+                "type":"string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "putIntent":{
+      "type":"object",
+      "properties":{
+        "id":{
+          "type":"string"
+        },
+        "name":{
+          "type":"string"
+        },
+        "metadata":{
+          "type":"string"
+        },
+        "doc":{
+          "type":"string"
+        }
+      }
+    },
+    "postIntentExpressions":{
+      "type":"array",
+      "items":{
+        "type":"object",
+        "properties":{
+          "body":{
+            "type":"string"
+          }
+        }
+      }
+    },
+    "createEntity":{
+      "type":"object",
+      "properties":{
+        "id":{
+          "type":"string"
+        },
+        "doc":{
+          "type":"string"
+        },
+        "values":{
+          "type":"array",
+          "items":{
+            "type":"object",
+            "properties":{
+              "value":{
+                "type":"string"
+              },
+              "expressions":{
+                "type":"array",
+                "items":{
+                  "type":"string"
+                }
+              }
+            }
+          }
+        },
+        "lookups":{
+          "type":"array",
+          "items":{
+            "type":"string"
+          }
+        }
+      }
+    },
+    "updateEntity":{
+      "type":"object",
+      "properties":{
+        "id":{
+          "type":"string"
+        },
+        "doc":{
+          "type":"string"
+        },
+        "values":{
+          "type":"array",
+          "items":{
+            "type":"object",
+            "properties":{
+              "value":{
+                "type":"string"
+              },
+              "expressions":{
+                "type":"array",
+                "items":{
+                  "type":"string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "postApps":{
+      "type":"object",
+      "properties":{
+        "name":{
+          "type":"string"
+        },
+        "lang":{
+          "type":"string"
+        },
+        "private":{
+          "type":"string"
+        },
+        "desc":{
+          "type":"string"
+        }
+      }
+    },
+    "putApps":{
+      "type":"object",
+      "properties":{
+        "name":{
+          "type":"string"
+        },
+        "lang":{
+          "type":"string"
+        },
+        "private":{
+          "type":"string"
+        },
+        "timezone":{
+          "type":"string"
+        },
+        "desc":{
+          "type":"string"
+        }
+      }
+    },
+    "postSamples":{
+      "type":"array",
+      "items":{
+        "type":"object",
+        "properties":{
+          "text":{
+            "type":"string"
+          },
+          "entities":{
+            "type":"array",
+            "items":{
+              "type":"object",
+              "properties":{
+                "entity":{
+                  "type":"string"
+                },
+                "value":{
+                  "type":"string"
+                },
+                "start":{
+                  "type":"number"
+                },
+                "end":{
+                  "type":"number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "postEntityValues":{
+      "type":"object",
+      "properties":{
+        "value":{
+          "type":"string"
+        },
+        "expressions":{
+          "type":"array",
+          "items":{
+            "type":"string"
+          }
+        },
+        "metadata":{
+          "type":"string"
+        }
+      }
+    },
+    "postEntitiesValuesExpressions":{
+      "type":"object",
+      "properties":{
+        "expression":{
+          "type":"string"
+        }
+      }
+    },
+    "putEntity":{
+      "type":"object",
+      "properties":{
+        "id":{
+          "type":"string"
+        },
+        "doc":{
+          "type":"string"
+        },
+        "values":{
+          "type":"array",
+          "items":{
+            "type":"object",
+            "properties":{
+              "value":{
+                "type":"string"
+              },
+              "expressions":{
+                "type":"array",
+                "items":{
+                  "type":"string"
+                }
+              },
+              "metadata":{
+                "type":"string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
